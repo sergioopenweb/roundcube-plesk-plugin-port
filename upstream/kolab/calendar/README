@@ -1,0 +1,68 @@
+A calendar module for Roundcube
+-------------------------------
+
+This maintained copy targets Roundcube 1.6+ on PHP 8.1+.
+
+The calendar UI depends on the companion plugins `libcalendaring` and
+`libkolab`, which must be installed alongside `calendar`.
+
+REQUIREMENTS
+------------
+
+Install all three plugins together:
+
+* kolab/calendar
+* kolab/libcalendaring
+* kolab/libkolab
+
+INSTALLATION
+------------
+
+For a manual installation into an existing Roundcube tree:
+
+1. Copy the plugin directories into `<path-to-roundcube>/plugins/`:
+
+  - `calendar`
+  - `libcalendaring`
+  - `libkolab`
+
+2. Create local config files as needed:
+
+  $ cp <path-to-roundcube>/plugins/calendar/config.inc.php.dist \
+       <path-to-roundcube>/plugins/calendar/config.inc.php
+  $ cp <path-to-roundcube>/plugins/libkolab/config.inc.php.dist \
+       <path-to-roundcube>/plugins/libkolab/config.inc.php
+
+3. Initialize the SQL required by your chosen backend:
+
+  - Always initialize `plugins/libkolab/SQL`
+  - For `calendar_driver = database`, initialize `plugins/calendar/drivers/database/SQL`
+  - For `calendar_driver = kolab`, initialize `plugins/calendar/drivers/kolab/SQL`
+  - For `calendar_driver = caldav`, initialize `plugins/calendar/drivers/caldav/SQL`
+
+4. Ensure Elastic skin assets are present:
+
+  - `plugins/libkolab/skins/elastic/libkolab.css`
+  - `plugins/libcalendaring/skins/elastic/libcal.css`
+  - `plugins/calendar/skins/elastic/fullcalendar.css`
+  - `plugins/calendar/skins/elastic/calendar.css`
+  - `plugins/calendar/skins/elastic/print.css`
+
+  If `lessc` is available, you can rebuild `libkolab.css` from
+  `plugins/libkolab/skins/elastic/libkolab.less`. This maintained copy also
+  ships fallback Elastic CSS files for manual Plesk installs.
+
+5. Enable the plugins in `<path-to-roundcube>/config/config.inc.php`:
+
+  $config['plugins'] = array(
+    (...),
+    'libcalendaring',
+    'libkolab',
+    'calendar',
+  );
+
+IMPORTANT
+---------
+
+This plugin set is intended for the Elastic skin. Do not rely on Classic/Larry
+instructions from older tutorials when installing on Roundcube 1.6+.

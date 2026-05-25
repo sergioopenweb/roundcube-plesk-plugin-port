@@ -1,0 +1,30 @@
+{
+    "name": "kolab/libcalendaring",
+    "type": "roundcube-plugin",
+    "description": "Library providing common functions for calendaring plugins",
+    "homepage": "https://git.kolab.org/diffusion/RPK/",
+    "license": "AGPLv3",
+    "version": "3.6.1",
+    "authors": [
+        {
+            "name": "Thomas Bruederli",
+            "email": "bruederli@kolabsys.com",
+            "role": "Lead"
+        },
+        {
+            "name": "Aleksander Machniak",
+            "email": "machniak@kolabsys.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=8.1",
+        "roundcube/plugin-installer": ">=0.3.0",
+        "sabre/vobject": "~4.5.1"
+    },
+    "extra": {
+        "roundcube": {
+            "min-version": "1.6.0"
+        }
+    }
+}
