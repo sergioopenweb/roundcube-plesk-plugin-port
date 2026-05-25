@@ -53,6 +53,7 @@ compile_libkolab() {
 }
 
 main() {
+  require_root
   [ -d "$PLUGINS_DIR" ] || die "Diretório de plugins não encontrado: $PLUGINS_DIR"
 
   compile_libkolab

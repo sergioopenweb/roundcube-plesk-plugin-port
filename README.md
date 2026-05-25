@@ -31,10 +31,42 @@ Monorepo para portar `automatic_addressbook` e o stack `kolab/calendar`, `kolab/
 
 ## Uso rápido
 
-Instalação no `Plesk`:
+Baixar o repositório e testar no `Plesk`:
 
 ```bash
-sudo ./installer/install-plesk.sh \
+git clone https://github.com/sergioopenweb/roundcube-plesk-plugin-port.git
+cd roundcube-plesk-plugin-port
+
+./installer/preflight-plesk.sh \
+  --target-dir /usr/share/psa-roundcube \
+  --db-name roundcubemail \
+  --calendar-driver database
+
+./installer/install-plesk.sh \
+  --target-dir /usr/share/psa-roundcube \
+  --db-name roundcubemail \
+  --calendar-driver database
+```
+
+Se você já usa `root` no `AlmaLinux`, não precisa de `sudo`.
+
+Observação: como o repositório está privado, o `git clone` e o download do
+`.tar.gz` exigem autenticação no GitHub.
+
+Se preferir baixar como arquivo compactado em vez de usar `git clone`:
+
+```bash
+curl -L -o roundcube-plesk-plugin-port.tar.gz \
+  https://github.com/sergioopenweb/roundcube-plesk-plugin-port/archive/refs/heads/main.tar.gz
+tar -xzf roundcube-plesk-plugin-port.tar.gz
+cd roundcube-plesk-plugin-port-main
+
+./installer/preflight-plesk.sh \
+  --target-dir /usr/share/psa-roundcube \
+  --db-name roundcubemail \
+  --calendar-driver database
+
+./installer/install-plesk.sh \
   --target-dir /usr/share/psa-roundcube \
   --db-name roundcubemail \
   --calendar-driver database
@@ -43,7 +75,7 @@ sudo ./installer/install-plesk.sh \
 Rollback:
 
 ```bash
-sudo ./installer/rollback.sh --target-dir /usr/share/psa-roundcube
+./installer/rollback.sh --target-dir /usr/share/psa-roundcube
 ```
 
 Smoke tests locais:

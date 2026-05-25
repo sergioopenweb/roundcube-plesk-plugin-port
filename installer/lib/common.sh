@@ -21,6 +21,14 @@ require_cmd() {
   have_cmd "$1" || die "Comando obrigatório ausente: $1"
 }
 
+is_root() {
+  [ "$(id -u)" -eq 0 ]
+}
+
+require_root() {
+  is_root || die "Este script precisa ser executado como root. Se preferir, use sudo."
+}
+
 timestamp() {
   date +"%Y%m%d-%H%M%S"
 }

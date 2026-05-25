@@ -166,6 +166,7 @@ select_plugins() {
 }
 
 verify_environment() {
+  require_root
   require_cmd php
   [ -d "$TARGET_DIR" ] || die "Diretório alvo não encontrado: $TARGET_DIR"
   [ -f "$TARGET_DIR/config/config.inc.php" ] || die "Config principal ausente em $TARGET_DIR/config/config.inc.php"

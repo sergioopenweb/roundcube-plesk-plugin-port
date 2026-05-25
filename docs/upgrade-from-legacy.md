@@ -38,8 +38,10 @@ Não faça isso.
 Use:
 
 ```bash
-sudo ./installer/install-plesk.sh
+./installer/install-plesk.sh
 ```
+
+Se você estiver logado como `root`, não precisa de `sudo`.
 
 ### Em vez de usar `PHP 7.0`
 

@@ -16,16 +16,50 @@ sem editar o `composer.json` principal do `Roundcube` do `Plesk` e sem repetir o
 ## Pré-requisitos
 
 - `Plesk Obsidian` com `Roundcube` funcional
-- acesso root ou `sudo`
+- acesso `root` ou `sudo`
 - `php` CLI
 - `mysql` CLI
 - acesso de leitura a `/etc/psa/.psa.shadow`
 - opcional: `lessc` para recompilar `libkolab.css`
 
+Se você já trabalha como `root` no `AlmaLinux`, rode os comandos diretamente, sem `sudo`.
+
+## Download rápido
+
+Com `git clone`:
+
+```bash
+git clone https://github.com/sergioopenweb/roundcube-plesk-plugin-port.git
+cd roundcube-plesk-plugin-port
+```
+
+Com arquivo compactado:
+
+```bash
+curl -L -o roundcube-plesk-plugin-port.tar.gz \
+  https://github.com/sergioopenweb/roundcube-plesk-plugin-port/archive/refs/heads/main.tar.gz
+tar -xzf roundcube-plesk-plugin-port.tar.gz
+cd roundcube-plesk-plugin-port-main
+```
+
+Observação: como o repositório está privado, o clone e o download exigem
+autenticação no GitHub.
+
+## Preflight recomendado
+
+Antes da instalação, valide o target:
+
+```bash
+./installer/preflight-plesk.sh \
+  --target-dir /usr/share/psa-roundcube \
+  --db-name roundcubemail \
+  --calendar-driver database
+```
+
 ## Comando recomendado
 
 ```bash
-sudo ./installer/install-plesk.sh \
+./installer/install-plesk.sh \
   --target-dir /usr/share/psa-roundcube \
   --db-name roundcubemail \
   --calendar-driver database
@@ -36,13 +70,13 @@ sudo ./installer/install-plesk.sh \
 Instalar só o auto-coletor:
 
 ```bash
-sudo ./installer/install-plesk.sh --install-set automatic
+./installer/install-plesk.sh --install-set automatic
 ```
 
 Instalar só o stack de calendário:
 
 ```bash
-sudo ./installer/install-plesk.sh \
+./installer/install-plesk.sh \
   --install-set calendar \
   --calendar-driver kolab
 ```
@@ -56,6 +90,19 @@ sudo ./installer/install-plesk.sh \
 5. copia templates de configuração dos plugins sem sobrescrever customizações existentes, exceto com `--force-config`
 6. recompila ou materializa os assets `Elastic`
 7. importa os SQL iniciais necessários
+
+Os scripts de instalação, rollback e build de assets exigem `root` explicitamente.
+
+## Sequência recomendada de teste
+
+1. rode o `preflight`
+2. faça a instalação com `install-plesk.sh`
+3. abra o `Roundcube` e verifique se:
+   - a interface abre sem erro
+   - o plugin `automatic_addressbook` aparece habilitado
+   - a aba de calendário abre com a skin `Elastic`
+4. se estiver reexecutando a instalação em um ambiente já mexido, considere `--skip-sql`
+5. se precisar voltar atrás, use `rollback.sh`
 
 ## SQL aplicado por backend
 
@@ -95,13 +142,13 @@ O script `installer/build-elastic-assets.sh`:
 Para restaurar o último backup do target:
 
 ```bash
-sudo ./installer/rollback.sh --target-dir /usr/share/psa-roundcube
+./installer/rollback.sh --target-dir /usr/share/psa-roundcube
 ```
 
 Para restaurar um manifesto específico:
 
 ```bash
-sudo ./installer/rollback.sh \
+./installer/rollback.sh \
   --target-dir /usr/share/psa-roundcube \
   --manifest /caminho/para/manifest.tsv
 ```

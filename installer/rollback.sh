@@ -68,6 +68,7 @@ parse_args() {
 
 main() {
   parse_args "$@"
+  require_root
 
   if [ -z "$MANIFEST" ]; then
     MANIFEST="$(find_latest_manifest)"

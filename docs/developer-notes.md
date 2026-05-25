@@ -59,6 +59,17 @@ Para gerar os fallbacks no target instalado:
 
 Se `lessc` estiver disponível, o script recompila `libkolab.less` em `libkolab.css`. Se não estiver, ele mantém o fallback CSS já versionado no monorepo.
 
+## Preflight para homologação
+
+Antes de testar em um `Plesk` real, rode:
+
+```bash
+./installer/preflight-plesk.sh \
+  --target-dir /usr/share/psa-roundcube \
+  --db-name roundcubemail \
+  --calendar-driver database
+```
+
 ## Observações importantes
 
 - não editar o `composer.json` raiz do `Roundcube` do `Plesk`
