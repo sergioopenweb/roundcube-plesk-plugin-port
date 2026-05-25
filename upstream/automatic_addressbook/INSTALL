@@ -1,0 +1,41 @@
+Installing automatic_addressbook
+--------------------------------
+
+This maintained copy targets Roundcube 1.6+ on PHP 8.1+.
+
+Manual installation
+-------------------
+
+1. Copy the plugin directory into your Roundcube plugins directory:
+
+    cp -R automatic_addressbook <path_to_roundcube>/plugins/
+
+2. Initialize the plugin table with the SQL script that matches your database
+   engine:
+
+    <path_to_roundcube>/plugins/automatic_addressbook/SQL/mysql.initial.sql
+
+   If your Roundcube tables use a prefix, adjust the foreign-key reference in
+   the SQL file before importing it.
+
+3. Enable the plugin in <path_to_roundcube>/config/config.inc.php by adding
+   `automatic_addressbook` to the existing plugins array.
+
+4. Optional: copy the plugin config template and override the defaults:
+
+    cp <path_to_roundcube>/plugins/automatic_addressbook/config/config.inc.php.dist \
+       <path_to_roundcube>/plugins/automatic_addressbook/config/config.inc.php
+
+Configuration
+-------------
+
+The plugin supports the following options in `config/config.inc.php`:
+
+- `default_addressbook`
+- `on_edit_move_to_default`
+- `db_table_collected_contacts`
+- `use_auto_abook`
+- `use_auto_abook_for_completion`
+
+There are no incremental `*.update.sql` migrations in this maintained copy.
+

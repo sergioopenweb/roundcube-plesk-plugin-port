@@ -1,0 +1,16 @@
+<?php
+
+/* automatic_addressbook plugin */
+$config['default_addressbook'] = '0';
+
+/* On edit, move the collected contact into the default address book. */
+$config['on_edit_move_to_default'] = false;
+
+/* Database table name used by the collected contacts backend. */
+$config['db_table_collected_contacts'] = 'collected_contacts';
+
+/* Is automatic_addressbook enabled or disabled by default for users? */
+$config['use_auto_abook'] = true;
+
+/* Should automatic_addressbook be used for recipient auto-completion? */
+$config['use_auto_abook_for_completion'] = true;
