@@ -50,9 +50,6 @@ cd roundcube-plesk-plugin-port
 
 Se você já usa `root` no `AlmaLinux`, não precisa de `sudo`.
 
-Observação: como o repositório está privado, o `git clone` e o download do
-`.tar.gz` exigem autenticação no GitHub.
-
 Se preferir baixar como arquivo compactado em vez de usar `git clone`:
 
 ```bash

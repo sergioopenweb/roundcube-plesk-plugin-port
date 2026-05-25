@@ -42,9 +42,6 @@ tar -xzf roundcube-plesk-plugin-port.tar.gz
 cd roundcube-plesk-plugin-port-main
 ```
 
-Observação: como o repositório está privado, o clone e o download exigem
-autenticação no GitHub.
-
 ## Preflight recomendado
 
 Antes da instalação, valide o target:
