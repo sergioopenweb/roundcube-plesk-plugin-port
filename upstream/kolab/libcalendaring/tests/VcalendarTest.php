@@ -448,6 +448,17 @@ class VcalendarTest extends PHPUnit\Framework\TestCase
         $this->assertEquals($num, substr_count($ics, 'END:VEVENT'), "VEVENT encapsulation END");
     }
 
+    public function test_export_apple_location()
+    {
+        $ical = new libcalendaring_vcalendar();
+        $ical->set_agent('Apple Inc.');
+        $events = $ical->import_from_file(__DIR__ . '/resources/multiple.ics', 'UTF-8');
+
+        $ics = $ical->export([$events[0]], null, false);
+
+        $this->assertStringContainsString('LOCATION:Wankdorf Stadium\\, Bern', $ics, "Export LOCATION with escaped comma for Apple clients");
+    }
+
     /**
      * @depends test_export
      */

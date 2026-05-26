@@ -387,16 +387,6 @@ class libcalendaring_vcalendar implements Iterator
     }
 
     /**
-     * Helper method to determine whether the connected client is an Apple device
-     */
-    private function is_apple()
-    {
-        return stripos($this->agent, 'Apple') !== false
-            || stripos($this->agent, 'Mac OS X') !== false
-            || stripos($this->agent, 'iOS/') !== false;
-    }
-
-    /**
      * Convert the given VEvent object to a libkolab compatible array representation
      *
      * @param VObject\Component\VEvent|VObject\Component\VTodo $ve VEvent object to convert
@@ -1136,7 +1126,7 @@ class libcalendaring_vcalendar implements Iterator
         }
 
         if (!empty($event['location'])) {
-            $ve->add($this->is_apple() ? new vobject_location_property($cal, 'LOCATION', $event['location']) : $cal->create('LOCATION', $event['location']));
+            $ve->add($cal->create('LOCATION', $event['location']));
         }
 
         if (!empty($event['description'])) {
@@ -1570,25 +1560,3 @@ class libcalendaring_vcalendar implements Iterator
 }
 
 
-/**
- * Override Sabre\VObject\Property\Text that quotes commas in the location property
- * because Apple clients treat that property as list.
- */
-class vobject_location_property extends VObject\Property\Text
-{
-    /**
-     * List of properties that are considered 'structured'.
-     *
-     * @var array
-     */
-    protected $structuredValues = [
-        // vCard
-        'N',
-        'ADR',
-        'ORG',
-        'GENDER',
-        'LOCATION',
-        // iCalendar
-        'REQUEST-STATUS',
-    ];
-}
