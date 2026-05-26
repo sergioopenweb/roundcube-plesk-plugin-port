@@ -74,7 +74,14 @@ class libcalendaring_vcalendar implements Iterator
     public function __construct($tz = null)
     {
         $this->timezone = $tz;
-        $this->prodid = '-//Roundcube ' . RCUBE_VERSION . '//Sabre VObject ' . VObject\Version::VERSION . '//EN';
+        $roundcube_version = defined('RCUBE_VERSION') ? RCUBE_VERSION : 'unknown';
+        $vobject_version = class_exists('Sabre\\VObject\\Version')
+            ? constant('Sabre\\VObject\\Version::VERSION')
+            : null;
+
+        $this->prodid = '-//Roundcube ' . $roundcube_version . '//Sabre VObject'
+            . ($vobject_version ? ' ' . $vobject_version : '')
+            . '//EN';
     }
 
     /**
