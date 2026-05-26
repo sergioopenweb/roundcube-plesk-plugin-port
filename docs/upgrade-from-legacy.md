@@ -58,6 +58,7 @@ O instalador cria `config/callendar.plugins.inc.php` e injeta um `include` idemp
 ## Cuidados na migração
 
 - faça backup antes de substituir uma instalação manual antiga
-- se já houver tabelas do plugin no banco, avalie usar `--skip-sql`
+- se já houver tabelas do plugin no banco, o instalador agora tenta detectar isso e tratar o SQL como já aplicado
+- use `--skip-sql` apenas quando quiser pular conscientemente qualquer alteração no banco
 - se você já tiver configs locais customizadas dos plugins, rode sem `--force-config`
 - se já houver customização manual nos diretórios de plugin, o rollback depende dos backups criados pelo instalador deste monorepo

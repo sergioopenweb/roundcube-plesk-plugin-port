@@ -81,10 +81,88 @@ install_static_template() {
   install_file "$template" "$destination" "$BACKUP_ROOT" "$MANIFEST"
 }
 
+mark_sql_applied() {
+  local stamp_file="$1"
+
+  mkdir -p "$SQL_STATE_DIR"
+  touch "$stamp_file"
+}
+
+sql_declared_tables() {
+  local sql_file="$1"
+
+  php -r '
+    $sql = file_get_contents($argv[1]);
+    preg_match_all(
+      "/CREATE\\s+TABLE\\s+(?:IF\\s+NOT\\s+EXISTS\\s+)?`?([A-Za-z0-9_]+)`?/i",
+      $sql,
+      $matches
+    );
+
+    foreach (array_values(array_unique($matches[1])) as $table) {
+        echo $table, PHP_EOL;
+    }
+  ' "$sql_file"
+}
+
+sql_has_destructive_ddl() {
+  local sql_file="$1"
+
+  php -r '
+    $sql = file_get_contents($argv[1]);
+    exit(preg_match("/\\bDROP\\s+TABLE\\s+IF\\s+EXISTS\\b/i", $sql) ? 0 : 1);
+  ' "$sql_file"
+}
+
+mysql_table_exists() {
+  local table_name="$1"
+  local result
+
+  result="$(
+    mysql -N -s -u admin "-p$DB_PASSWORD" "$DB_NAME" \
+      -e "SHOW TABLES LIKE '$table_name'"
+  )"
+
+  [ "$result" = "$table_name" ]
+}
+
+detect_sql_schema_state() {
+  local sql_file="$1"
+  local -a tables=()
+  local existing_count=0
+  local table_name
+
+  mapfile -t tables < <(sql_declared_tables "$sql_file")
+
+  if [ "${#tables[@]}" -eq 0 ]; then
+    printf 'unknown'
+    return
+  fi
+
+  for table_name in "${tables[@]}"; do
+    if mysql_table_exists "$table_name"; then
+      existing_count=$((existing_count + 1))
+    fi
+  done
+
+  if [ "$existing_count" -eq 0 ]; then
+    printf 'absent'
+    return
+  fi
+
+  if [ "$existing_count" -eq "${#tables[@]}" ]; then
+    printf 'present'
+    return
+  fi
+
+  printf 'partial:%s/%s' "$existing_count" "${#tables[@]}"
+}
+
 apply_sql_once() {
   local stamp_name="$1"
   local sql_file="$2"
   local stamp_file="$SQL_STATE_DIR/${stamp_name}.stamp"
+  local schema_state
 
   if [ -f "$stamp_file" ]; then
     log "SQL já aplicado anteriormente: $stamp_name"
@@ -92,9 +170,26 @@ apply_sql_once() {
   fi
 
   [ -f "$sql_file" ] || die "Arquivo SQL ausente: $sql_file"
+
+  schema_state="$(detect_sql_schema_state "$sql_file")"
+
+  case "$schema_state" in
+    present)
+      mark_sql_applied "$stamp_file"
+      log "Schema já presente no banco; marcando SQL como aplicado: $stamp_name"
+      return
+      ;;
+    partial:*)
+      if sql_has_destructive_ddl "$sql_file"; then
+        die "Schema parcial detectado para $stamp_name ($schema_state). Abortei para evitar SQL destrutivo sobre tabelas já existentes."
+      fi
+
+      warn "Schema parcial detectado para $stamp_name ($schema_state); aplicando SQL não destrutivo para completar a instalação"
+      ;;
+  esac
+
   mysql -u admin "-p$DB_PASSWORD" "$DB_NAME" <"$sql_file"
-  mkdir -p "$SQL_STATE_DIR"
-  touch "$stamp_file"
+  mark_sql_applied "$stamp_file"
   log "SQL aplicado: $sql_file"
 }
 

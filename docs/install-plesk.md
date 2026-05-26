@@ -98,10 +98,13 @@ Os scripts de instalação, rollback e build de assets exigem `root` explicitame
    - a interface abre sem erro
    - o plugin `automatic_addressbook` aparece habilitado
    - a aba de calendário abre com a skin `Elastic`
-4. se estiver reexecutando a instalação em um ambiente já mexido, considere `--skip-sql`
-5. se precisar voltar atrás, use `rollback.sh`
+4. se estiver reexecutando a instalação em um ambiente já mexido, o instalador detecta tabelas já existentes e marca o SQL como aplicado automaticamente
+5. use `--skip-sql` só quando você quiser pular conscientemente qualquer alteração no banco
+6. se precisar voltar atrás, use `rollback.sh`
 
 ## SQL aplicado por backend
+
+Ao reexecutar a instalação, o script tenta detectar as tabelas declaradas em cada SQL. Se elas já existirem no banco, ele grava o estado local e segue sem exigir `stamp` manual.
 
 Sempre:
 

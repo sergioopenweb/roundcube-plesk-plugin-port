@@ -48,6 +48,8 @@ cd roundcube-plesk-plugin-port
   --calendar-driver database
 ```
 
+Se o banco já tiver as tabelas desses plugins, o instalador tenta detectar isso e marca o SQL como já aplicado automaticamente.
+
 Se você já usa `root` no `AlmaLinux`, não precisa de `sudo`.
 
 Se preferir baixar como arquivo compactado em vez de usar `git clone`:
