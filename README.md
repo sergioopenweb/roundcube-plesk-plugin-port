@@ -1,6 +1,10 @@
 # Roundcube Plugin Port for Plesk
 
-Monorepo para portar `automatic_addressbook` e o stack `kolab/calendar`, `kolab/libcalendaring` e `kolab/libkolab` para um `Roundcube` moderno em `Plesk Obsidian`, com foco em `PHP 8.3+` e instalação manual segura.
+Este projeto é uma adaptação modernizada do plugin `automatic_addressbook` e da parte de calendário do stack `roundcubemail-plugins-kolab`, preparada para uso prático em `Roundcube 1.6+` no `Plesk Obsidian`.
+
+A proposta não é reescrever esses projetos do zero, e sim empacotar os upstreams com os ajustes necessários para ambientes atuais: compatibilidade com `PHP 8.3+`, instalação manual segura, SQL por backend, assets `Elastic` já presentes, backup, rollback e reexecução idempotente.
+
+Do stack `Kolab`, este repositório usa especificamente `calendar`, `libcalendaring` e `libkolab`: a mesma parte que, em uma instalação manual, você normalmente clonaria do upstream e copiaria para `plugins/`, seguido da criação do `config.inc.php` a partir de `config.inc.php.dist`. Aqui, esse fluxo foi transformado em uma instalação mais prática e repetível para `Plesk`.
 
 ## O que este repositório entrega
 
